@@ -67,17 +67,17 @@ $ ->
         end = (row * 3) + 2
         middle = (row * 3) + 1
 
-      #vertical check
-      @checkField(start, 'start')
-      @checkField(middle, 'middle')
-      @checkField(end, 'end')
-      @checkWin()
+        #vertical check
+        @checkField(start, 'start')
+        @checkField(middle, 'middle')
+        @checkField(end, 'end')
+        @checkWin()
 
-      # horizontal check
-      for column in [start..end]
-        @checkField(column, 'horizontal')
-      @checkWin()
-      @emptyStorageVar('horizontal')
+        # horizontal check
+        for column in [start..end]
+          @checkField(column, 'horizontal')
+        @checkWin()
+        @emptyStorageVar('horizontal')
 
 
     checkField: (field, storageVar) ->
