@@ -73,7 +73,7 @@
         });
       },
       checkEnd: function() {
-        var col, column, diagonal, diagonals, end, i, j, k, l, len, len1, middle, ref, ref1, results, row, start;
+        var col, column, diagonal, diagonals, end, i, j, k, l, len, len1, middle, ref, ref1, row, start;
         this.data.x = {};
         this.data.o = {};
         diagonals = [[0, 4, 8], [2, 4, 6]];
@@ -86,22 +86,20 @@
           this.checkWin();
           this.emptyStorageVar('diagonal');
         }
-        results = [];
         for (row = k = 0; k <= 2; row = ++k) {
           start = row * 3;
           end = (row * 3) + 2;
           middle = (row * 3) + 1;
-          this.checkField(start, 'start');
-          this.checkField(middle, 'middle');
-          this.checkField(end, 'end');
-          this.checkWin();
-          for (column = l = ref = start, ref1 = end; ref <= ref1 ? l <= ref1 : l >= ref1; column = ref <= ref1 ? ++l : --l) {
-            this.checkField(column, 'horizontal');
-          }
-          this.checkWin();
-          results.push(this.emptyStorageVar('horizontal'));
         }
-        return results;
+        this.checkField(start, 'start');
+        this.checkField(middle, 'middle');
+        this.checkField(end, 'end');
+        this.checkWin();
+        for (column = l = ref = start, ref1 = end; ref <= ref1 ? l <= ref1 : l >= ref1; column = ref <= ref1 ? ++l : --l) {
+          this.checkField(column, 'horizontal');
+        }
+        this.checkWin();
+        return this.emptyStorageVar('horizontal');
       },
       checkField: function(field, storageVar) {
         if ($(".square").eq(field).hasClass("x")) {

@@ -59,11 +59,11 @@ body {
 }
 
 .square.x {
-  content:url(/images/cat.png);
+  content:url(../images/cat.png);
 }
 
 .square.o {
-  content:url(/images/dog.png);
+  content:url(../images/dog.png);
 }
 
 .notifications p {

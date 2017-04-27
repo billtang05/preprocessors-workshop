@@ -6,7 +6,13 @@ $ ->
       o: {}
       gameOver: false
 
-    #Insert initialization code here
+    initialize: ->
+      @data.gameOver = false
+      @setPlayerNames()
+      @assignRoles()
+      @prepareBoard()
+      @updateNotifications()
+      @addListeners()
 
     setPlayerNames: ->
       @data.player1 = $("input[name='pl-1']").val()
@@ -23,7 +29,12 @@ $ ->
       $(".alerts").text("#{@getPlayerName("X")} Goes First")
       $("<div>", {class: "square"}).appendTo("#board") for square in [0..8]
 
-    #Insert function to decide who goes first
+    assignRoles: ->
+      roles = ["X","O"].sort(->
+        return 0.5 - Math.random()
+      )
+      @data.rolep1 = roles[0]
+      @data.rolep2 = roles[1]
 
     updateNotifications: ->
       $(".notifications").empty().show()
@@ -31,10 +42,42 @@ $ ->
     addNotification: (msg) ->
       $(".notifications").append($("<p>", {text: msg}))
 
-    #Insert script to make moves
+    addListeners: ->
+      $(".square").click ->
+        if Tic.data.gameOver is no and not $(@).text().length
+          if Tic.data.turns % 2 is 0 then $(@).html("X").addClass("x moved")
+          else if Tic.data.turns % 2 isnt 0 then $(@).html("O").addClass("o moved")
+          Tic.data.turns++
+          Tic.checkEnd()
+          if Tic.data.gameOver isnt yes and $(".moved").length >= 9 then Tic.checkTie("none")
 
+    checkEnd : ->
+      @data.x = {}
+      @data.o = {}
 
-    #Insert checkEnd here!
+      #diagonal check
+      diagonals = [[0,4,8], [2,4,6]]
+      for diagonal in diagonals
+        for col in diagonal
+          @checkField(col, 'diagonal')
+        @checkWin()
+        @emptyStorageVar('diagonal')
+      for row in [0..2]
+        start = row * 3
+        end = (row * 3) + 2
+        middle = (row * 3) + 1
+
+      #vertical check
+      @checkField(start, 'start')
+      @checkField(middle, 'middle')
+      @checkField(end, 'end')
+      @checkWin()
+
+      # horizontal check
+      for column in [start..end]
+        @checkField(column, 'horizontal')
+      @checkWin()
+      @emptyStorageVar('horizontal')
 
 
     checkField: (field, storageVar) ->
@@ -93,4 +136,13 @@ $ ->
 
   $("body").on("click",".play-again", -> Tic.initialize())
 
-  #Insert modal content here
+  modal = document.getElementById('myModal')
+  btn = document.getElementById("myBtn")
+  span = document.getElementsByClassName("close")[0]
+
+  span.onclick = ->
+    modal.style.display = "none"
+
+  window.onclick = (event) ->
+    if event.target == modal
+      modal.style.display = "none"
